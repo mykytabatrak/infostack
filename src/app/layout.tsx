@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font";
+import { ColorSchemeController } from "@/features/color-scheme/controller";
+
 import "./globals.css";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Infostack",
@@ -14,7 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body>{children}</body>
+      <body className="text-gray-12 bg-app-background">{children}</body>
+      {/* <ColorSchemeController /> */}
     </html>
   );
 }

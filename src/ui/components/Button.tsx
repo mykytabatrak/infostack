@@ -1,18 +1,17 @@
 import type { ComponentRef, ComponentPropsWithoutRef } from "react";
+import type { VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
+import { button } from "@/ui/class-names";
 
 export const Button = forwardRef<
   ComponentRef<"button">,
-  ComponentPropsWithoutRef<"button">
->(function Button({ className, ...props }, ref) {
+  ComponentPropsWithoutRef<"button"> & VariantProps<typeof button>
+>(function Button({ className, intent, ...props }, ref) {
   return (
     <button
       ref={ref}
-      className={twMerge(
-        "inline-flex h-8 items-center rounded border border-black bg-white px-3 text-black",
-        className,
-      )}
+      className={twMerge(button({ className, intent }))}
       {...props}
     />
   );
