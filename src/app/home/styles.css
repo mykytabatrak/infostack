@@ -1,0 +1,56 @@
+.page {
+  @apply grid gap-y-8;
+
+  min-height: 100dvh;
+  grid-template-rows: [header] theme(height.14) [main] 1fr [footer] theme(
+      height.20
+    );
+  grid-template-columns:
+    [fullbleed-start] 1fr [breakout-start] theme(width.4) [main-start] minmax(
+      0,
+      1080px
+    )
+    [main-end] theme(width.4)
+    [breakout-end] 1fr
+    [fullbleed-end];
+}
+
+.header,
+.main,
+.footer {
+  @apply grid;
+
+  grid-template-columns: subgrid;
+}
+
+.header {
+  @apply sticky top-0 border-b border-solid border-gray-6 bg-background;
+
+  grid-area: header / fullbleed;
+  grid-template-rows: subgrid;
+}
+
+.header-content {
+  @apply grid grid-cols-2 items-center justify-between;
+
+  grid-area: header / main;
+}
+
+.main {
+  @apply gap-y-12;
+
+  grid-area: main / main;
+  grid-auto-rows: min-content;
+}
+
+.footer {
+  @apply border-t border-solid border-gray-6 bg-gray-1;
+
+  grid-area: footer / fullbleed;
+}
+
+.footer-content {
+  @apply grid items-center;
+
+  grid-column-start: main;
+}

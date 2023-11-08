@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import * as allColorScales from "@radix-ui/colors";
+import { radixThemePreset } from "radix-themes-tw";
 
 function toCssCasing(str: string) {
   return str
@@ -10,7 +11,7 @@ function toCssCasing(str: string) {
 }
 
 const colorScales = Object.entries(allColorScales).filter(([name]) =>
-  ["gray"].some((key) => name.includes(key)),
+  ["gray", "lime", "sage", "black", "white"].some((key) => name.includes(key)),
 );
 
 const colorScalesKeys = colorScales
@@ -18,7 +19,7 @@ const colorScalesKeys = colorScales
   .map(([, value]) => Object.keys(value))
   .flat();
 
-const colorScalesByGroups = Object.entries(allColorScales).reduce<{
+const colorScalesByGroups = colorScales.reduce<{
   light: {
     srgb: Record<string, string>;
     p3: Record<string, string>;
@@ -59,7 +60,7 @@ const colorScalesByGroups = Object.entries(allColorScales).reduce<{
 );
 
 const colorsPlugin = plugin(
-  function ({ addBase, addUtilities }) {
+  ({ addBase, addUtilities }) => {
     addBase([
       {
         "html, .light, .light-theme": colorScalesByGroups.light.srgb,
@@ -106,19 +107,31 @@ const colorsPlugin = plugin(
   },
 );
 
+const utilitiesPlugin = plugin(({ addUtilities }) => {
+  addUtilities([
+    {
+      ".scrollbar-w-none": {
+        "scrollbar-width": "none",
+        "--ms-overflow-style": "none",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      },
+    },
+  ]);
+});
+
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "media",
+  presets: [radixThemePreset],
+  plugins: [utilitiesPlugin],
   theme: {
     extend: {
       colors: {
-        white: "white",
-        black: "black",
-        "app-background": "var(--app-background-color)",
-        logo: "var(--logo-color)",
+        background: "var(--color-background)",
       },
     },
   },
-  plugins: [colorsPlugin],
 };
 export default config;

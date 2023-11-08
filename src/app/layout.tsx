@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font";
-import { ColorSchemeController } from "@/features/color-scheme/controller";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Providers } from "./providers";
 
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
-import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Infostack",
@@ -16,9 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="text-gray-12 bg-app-background">{children}</body>
-      {/* <ColorSchemeController /> */}
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

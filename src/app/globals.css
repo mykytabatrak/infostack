@@ -2,38 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    color-scheme: light dark;
-  }
+body {
+  min-height: 100dvh;
+}
 
-  @media (prefers-color-scheme: light) {
-    html {
-      --app-background-color: white;
-      --logo-color: black;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    html {
-      --app-background-color: var(--gray-1);
-      --logo-color: white;
-    }
-  }
-
-  html.light,
-  html.light-theme {
-    --app-background-color: white;
-    --logo-color: black;
-
-    color-scheme: light;
-  }
-
-  html.dark,
-  html.dark-theme {
-    --app-background-color: var(--gray-1);
-    --logo-color: white;
-
-    color-scheme: dark;
-  }
+.radix-themes {
+  --default-font-family: var(--font-geist-sans);
+  --code-font-family: var(--font-geist-mono);
 }
