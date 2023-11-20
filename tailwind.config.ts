@@ -131,6 +131,12 @@ const config: Config = {
       colors: {
         background: "var(--color-background)",
       },
+      minHeight: {
+        dvh: "100dvh",
+      },
+      gridTemplateColumns: {
+        subgird: "subgird",
+      },
     },
   },
 };

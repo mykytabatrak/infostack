@@ -1,25 +1,18 @@
+/* prettier-ignore */
 .page {
-  @apply grid gap-y-8;
+  grid-template-rows:
+    [header] theme(height.14)
+    [main] 1fr
+    [footer] theme(height.20);
 
-  min-height: 100dvh;
-  grid-template-rows: [header] theme(height.14) [main] 1fr [footer] theme(
-      height.20
-    );
   grid-template-columns:
-    [fullbleed-start] 1fr [breakout-start] theme(width.4) [main-start] minmax(
-      0,
-      1080px
-    )
-    [main-end] theme(width.4)
-    [breakout-end] 1fr
-    [fullbleed-end];
+    [fullbleed-start] 1fr [breakout-start] theme(width.4) [content-start]
+    minmax(0, 1080px) [content-end] theme(width.4) [breakout-end] 1fr [fullbleed-end];
 }
 
 .header,
 .main,
 .footer {
-  @apply grid;
-
   grid-template-columns: subgrid;
 }
 
@@ -33,13 +26,13 @@
 .header-content {
   @apply grid grid-cols-2 items-center justify-between;
 
-  grid-area: header / main;
+  grid-area: header / content;
 }
 
 .main {
   @apply gap-y-12;
 
-  grid-area: main / main;
+  grid-area: main / content;
   grid-auto-rows: min-content;
 }
 
@@ -52,5 +45,5 @@
 .footer-content {
   @apply grid items-center;
 
-  grid-column-start: main;
+  grid-column-start: content;
 }

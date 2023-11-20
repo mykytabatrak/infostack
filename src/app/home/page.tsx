@@ -8,6 +8,7 @@ import {
   StarIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
+import { twJoin } from "tailwind-merge";
 import { Logo } from "@/ui/icons/Logo";
 
 import "./styles.css";
@@ -49,8 +50,8 @@ function Tweet({ avatarSrc, name, username, children, ...props }: TweetProps) {
 
 export default function Home() {
   return (
-    <div className="page">
-      <header className="header isolate z-10">
+    <div className="page grid min-h-dvh gap-y-8">
+      <header className="header gri isolate z-10">
         <div className="header-content">
           <Link
             href="/home"
@@ -63,15 +64,15 @@ export default function Home() {
           </Link>
           <div className="flex items-center gap-x-2 justify-self-end">
             <Button asChild variant="outline" color="gray">
-              <Link href="login">Log In</Link>
+              <Link href="auth/login">Log In</Link>
             </Button>
             <Button asChild>
-              <Link href="signup">Sign Up</Link>
+              <Link href="auth/signup">Sign Up</Link>
             </Button>
           </div>
         </div>
       </header>
-      <main className="main">
+      <main className="main grid">
         <div className="grid justify-items-center gap-y-6 md:grid-cols-2 md:items-center md:gap-x-6">
           <div className="space-y-2">
             <Heading align="center" size="7">
@@ -89,6 +90,7 @@ export default function Home() {
               height={1080}
               alt=""
               className="rounded snap-center rounded-4"
+              priority
             />
             <Image
               src="/app-example-2.png"
@@ -96,6 +98,7 @@ export default function Home() {
               height={1080}
               alt=""
               className="rounded snap-center rounded-4"
+              priority
             />
             <Image
               src="/app-example-3.png"
@@ -103,6 +106,7 @@ export default function Home() {
               height={1080}
               alt=""
               className="rounded snap-center rounded-4"
+              priority
             />
           </div>
         </div>
@@ -220,7 +224,7 @@ export default function Home() {
           <Button>Get Started</Button>
         </div>
       </main>
-      <footer className="footer">
+      <footer className="footer grid">
         <div className="footer-content">
           <Text as="p" size="2" color="gray">
             &copy; {new Date().getFullYear()} Mykyta Batrak. All rights
