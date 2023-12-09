@@ -8,10 +8,8 @@ import {
   StarIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
-import { twJoin } from "tailwind-merge";
+import { cx } from "class-variance-authority";
 import { Logo } from "@/ui/icons/Logo";
-
-import "./styles.css";
 
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
@@ -50,12 +48,26 @@ function Tweet({ avatarSrc, name, username, children, ...props }: TweetProps) {
 
 export default function Home() {
   return (
-    <div className="page grid min-h-dvh gap-y-8">
-      <header className="header gri isolate z-10">
-        <div className="header-content">
+    <div
+      className={cx(
+        "grid min-h-dvh gap-y-8",
+        "[--footer:theme(height.20)] [--header:theme(height.14)] [--main:1fr]",
+        "grid-rows-[[header]_var(--header)_[main]_var(--main)_[footer]_var(--footer)]",
+        "[--breakout:theme(width.4)] [--content:minmax(0,1080px)] [--fullbleed:1fr]",
+        "grid-cols-[[fullbleed-start]_var(--fullbleed)_[breakout-start]_var(--breakout)_[content-start]_var(--content)_[content-end]_var(--breakout)_[breakout-end]_var(--fullbleed)_[fullbleed-end]]",
+      )}
+    >
+      <header
+        className={cx(
+          "sticky top-0 isolate z-10",
+          "col-[fullbleed] row-[header] grid grid-cols-subgrid grid-rows-subgrid",
+          "border-b border-solid border-gray-6 bg-background",
+        )}
+      >
+        <div className="col-[content] row-[header] grid grid-cols-2 items-center justify-between">
           <Link
             href="/home"
-            className="text-xl flex items-center gap-x-1 justify-self-start font-bold"
+            className="flex items-center gap-x-1 justify-self-start text-xl font-bold"
           >
             <Logo className="inline-block h-8 w-8" />{" "}
             <Text size="4" trim="both">
@@ -72,7 +84,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main className="main grid">
+      <main className="col-[content] row-[main] grid auto-rows-min grid-cols-subgrid gap-y-12">
         <div className="grid justify-items-center gap-y-6 md:grid-cols-2 md:items-center md:gap-x-6">
           <div className="space-y-2">
             <Heading align="center" size="7">
@@ -83,7 +95,7 @@ export default function Home() {
               documentation a joy to write.
             </Text>
           </div>
-          <div className="grid max-w-2xl snap-x snap-mandatory auto-cols-[100%] grid-flow-col gap-x-4 overflow-x-auto overscroll-contain scroll-smooth rounded-4 bg-transparent shadow-6 scrollbar-w-none">
+          <div className="scrollbar-w-none grid max-w-2xl snap-x snap-mandatory auto-cols-[100%] grid-flow-col gap-x-4 overflow-x-auto overscroll-contain scroll-smooth rounded-4 bg-transparent shadow-6">
             <Image
               src="/app-example-1.png"
               width={1920}
@@ -224,8 +236,8 @@ export default function Home() {
           <Button>Get Started</Button>
         </div>
       </main>
-      <footer className="footer grid">
-        <div className="footer-content">
+      <footer className="col-[fullbleed] row-[footer] grid grid-cols-subgrid border-t border-solid border-gray-6 bg-gray-1">
+        <div className="col-[content] grid items-center">
           <Text as="p" size="2" color="gray">
             &copy; {new Date().getFullYear()} Mykyta Batrak. All rights
             reserved.

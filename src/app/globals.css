@@ -1,12 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  min-height: 100dvh;
-}
-
-.radix-themes {
-  --default-font-family: var(--font-geist-sans);
-  --code-font-family: var(--font-geist-mono);
-}
