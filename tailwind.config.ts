@@ -5,7 +5,11 @@ const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "media",
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        inherit: "inherit",
+      },
+    },
     borderRadius: {
       "0": borderRadius.none,
       "1": "var(--radius-1)",

@@ -53,18 +53,18 @@ export default function Home() {
         "grid min-h-dvh gap-y-8",
         "[--footer:theme(height.20)] [--header:theme(height.14)] [--main:1fr]",
         "grid-rows-[[header]_var(--header)_[main]_var(--main)_[footer]_var(--footer)]",
-        "[--breakout:theme(width.4)] [--content:minmax(0,1080px)] [--fullbleed:1fr]",
-        "grid-cols-[[fullbleed-start]_var(--fullbleed)_[breakout-start]_var(--breakout)_[content-start]_var(--content)_[content-end]_var(--breakout)_[breakout-end]_var(--fullbleed)_[fullbleed-end]]",
+        "[--content:minmax(0,1080px)] [--fullbleed:1fr]",
+        "grid-cols-[[fullbleed-start]_var(--fullbleed)_[content-start]_var(--content)_[content-end]_var(--fullbleed)_[fullbleed-end]]",
       )}
     >
       <header
         className={cx(
           "sticky top-0 isolate z-10",
-          "col-[fullbleed] row-[header] grid grid-cols-subgrid grid-rows-subgrid",
+          "grid-cols-inherit col-[fullbleed] row-[header] grid",
           "border-b border-solid border-gray-6 bg-background",
         )}
       >
-        <div className="col-[content] row-[header] grid grid-cols-2 items-center justify-between">
+        <div className="col-[content] grid grid-cols-2 items-center justify-between">
           <Link
             href="/home"
             className="flex items-center gap-x-1 justify-self-start text-xl font-bold"
@@ -84,7 +84,7 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main className="col-[content] row-[main] grid auto-rows-min grid-cols-subgrid gap-y-12">
+      <main className="col-[content] row-[main] grid auto-rows-min gap-y-12">
         <div className="grid justify-items-center gap-y-6 md:grid-cols-2 md:items-center md:gap-x-6">
           <div className="space-y-2">
             <Heading align="center" size="7">
@@ -236,7 +236,7 @@ export default function Home() {
           <Button>Get Started</Button>
         </div>
       </main>
-      <footer className="col-[fullbleed] row-[footer] grid grid-cols-subgrid border-t border-solid border-gray-6 bg-gray-1">
+      <footer className="grid-cols-inherit col-[fullbleed] row-[footer] grid border-t border-solid border-gray-6 bg-gray-1">
         <div className="col-[content] grid items-center">
           <Text as="p" size="2" color="gray">
             &copy; {new Date().getFullYear()} Mykyta Batrak. All rights
