@@ -10,6 +10,14 @@ import {
 } from "@heroicons/react/24/solid";
 import { cx } from "class-variance-authority";
 import { Logo } from "@/ui/icons/Logo";
+import {
+  Carousel,
+  CarouselContainer,
+  CarouselNextButton,
+  CarouselPrevButton,
+  CarouselSlide,
+  CarouselViewport,
+} from "@/ui/components/Carousel";
 
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
@@ -53,14 +61,14 @@ export default function Home() {
         "grid min-h-dvh gap-y-8",
         "[--footer:theme(height.20)] [--header:theme(height.14)] [--main:1fr]",
         "grid-rows-[[header]_var(--header)_[main]_var(--main)_[footer]_var(--footer)]",
-        "[--content:minmax(0,1080px)] [--fullbleed:1fr]",
-        "grid-cols-[[fullbleed-start]_var(--fullbleed)_[content-start]_var(--content)_[content-end]_var(--fullbleed)_[fullbleed-end]]",
+        "[--breakout:theme(width.4)] [--content:minmax(0,1080px)] [--fullbleed:1fr]",
+        "grid-cols-[[fullbleed-start]_var(--fullbleed)_[breakout-start]_var(--breakout)_[content-start]_var(--content)_[content-end]_var(--breakout)_[breakout-end]_var(--fullbleed)_[fullbleed-end]]",
       )}
     >
       <header
         className={cx(
           "sticky top-0 isolate z-10",
-          "grid-cols-inherit col-[fullbleed] row-[header] grid",
+          "col-[fullbleed] row-[header] grid grid-cols-inherit",
           "border-b border-solid border-gray-6 bg-background",
         )}
       >
@@ -95,32 +103,41 @@ export default function Home() {
               documentation a joy to write.
             </Text>
           </div>
-          <div className="scrollbar-w-none grid max-w-2xl snap-x snap-mandatory auto-cols-[100%] grid-flow-col gap-x-4 overflow-x-auto overscroll-contain scroll-smooth rounded-4 bg-transparent shadow-6">
-            <Image
-              src="/app-example-1.png"
-              width={1920}
-              height={1080}
-              alt=""
-              className="rounded snap-center rounded-4"
-              priority
-            />
-            <Image
-              src="/app-example-2.png"
-              width={1920}
-              height={1080}
-              alt=""
-              className="rounded snap-center rounded-4"
-              priority
-            />
-            <Image
-              src="/app-example-3.png"
-              width={1920}
-              height={1080}
-              alt=""
-              className="rounded snap-center rounded-4"
-              priority
-            />
-          </div>
+          <Carousel className="max-w-2xl shadow-6">
+            <CarouselViewport>
+              <CarouselContainer>
+                <CarouselSlide asChild>
+                  <Image
+                    src="/app-example-1.png"
+                    width={1920}
+                    height={1080}
+                    alt=""
+                    priority
+                  />
+                </CarouselSlide>
+                <CarouselSlide asChild>
+                  <Image
+                    src="/app-example-2.png"
+                    width={1920}
+                    height={1080}
+                    alt=""
+                    priority
+                  />
+                </CarouselSlide>
+                <CarouselSlide asChild>
+                  <Image
+                    src="/app-example-3.png"
+                    width={1920}
+                    height={1080}
+                    alt=""
+                    priority
+                  />
+                </CarouselSlide>
+              </CarouselContainer>
+            </CarouselViewport>
+            <CarouselPrevButton />
+            <CarouselNextButton />
+          </Carousel>
         </div>
         <div className="grid gap-y-8">
           <SectionHeading>Why teams love Infostack</SectionHeading>
@@ -236,7 +253,7 @@ export default function Home() {
           <Button>Get Started</Button>
         </div>
       </main>
-      <footer className="grid-cols-inherit col-[fullbleed] row-[footer] grid border-t border-solid border-gray-6 bg-gray-1">
+      <footer className="col-[fullbleed] row-[footer] grid grid-cols-inherit border-t border-solid border-gray-6 bg-gray-1">
         <div className="col-[content] grid items-center">
           <Text as="p" size="2" color="gray">
             &copy; {new Date().getFullYear()} Mykyta Batrak. All rights

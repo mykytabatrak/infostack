@@ -1,6 +1,6 @@
 import type { ComponentRef, ComponentPropsWithoutRef } from "react";
 import { forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
+import { cx } from "class-variance-authority";
 
 type Ref = ComponentRef<"div">;
 type Props = ComponentPropsWithoutRef<"div">;
@@ -12,7 +12,7 @@ export const Skeleton = forwardRef<Ref, Props>(function Skeleton(
   return (
     <div
       ref={ref}
-      className={twMerge("animate-pulse bg-grayA-3", className)}
+      className={cx("bg-grayA-3 animate-pulse", className)}
       {...props}
     />
   );
