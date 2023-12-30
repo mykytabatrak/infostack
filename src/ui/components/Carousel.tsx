@@ -1,21 +1,24 @@
 "use client";
 
 import type { ComponentRef, ComponentPropsWithoutRef } from "react";
-import { forwardRef, useCallback, useMemo, useSyncExternalStore } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import useEmblaCarousel, { UseEmblaCarouselType } from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import { cx } from "class-variance-authority";
 import { useMergeRefs } from "@floating-ui/react";
-import { IconButton, Slot } from "@radix-ui/themes";
+import { IconButton, Slot, useThemeContext } from "@radix-ui/themes";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 import { createComponentContext } from "@/lib/createComponentContext";
 
 type CarouselContextValue = {
   emblaRef: UseEmblaCarouselType[0];
-  // canScrollPrev: boolean;
-  scrollPrev: VoidFunction;
-  // canScrollNext: boolean;
-  scrollNext: VoidFunction;
+  emblaApi: UseEmblaCarouselType[1];
   loop?: boolean;
 } | null;
 
@@ -23,7 +26,9 @@ const [CarouselContext, useCarouselContext] =
   createComponentContext<CarouselContextValue>("Carousel", null);
 
 type CarouselRef = ComponentRef<"div">;
-interface CarouselProps extends ComponentPropsWithoutRef<"div"> {
+interface CarouselProps
+  extends Omit<ComponentPropsWithoutRef<"div">, "aria-label">,
+    Required<Pick<ComponentPropsWithoutRef<"div">, "aria-label">> {
   loop?: boolean;
   asChild?: boolean;
 }
@@ -36,41 +41,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
 
     const Comp = asChild ? Slot : "div";
 
-    // const  = useSyncExternalStore(
-    //   (callback) => {
-    //     if (!emblaApi) return () => {};
-
-    //     emblaApi.on("init", callback);
-    //     return () => {
-    //       emblaApi.off("init", callback);
-    //     };
-    //   },
-    //   () => "string",
-    //   () => "string",
-    // );
-
-    const scrollPrev = useCallback(
-      (jump?: boolean) => {
-        !!emblaApi && emblaApi.scrollPrev(jump);
-      },
-      [emblaApi],
-    );
-
-    const scrollNext = useCallback(
-      (jump?: boolean) => {
-        !!emblaApi && emblaApi.scrollNext(jump);
-      },
-      [emblaApi],
-    );
-
     const contextValue = useMemo(
       () => ({
         emblaRef,
-        scrollPrev,
-        scrollNext,
+        emblaApi,
         loop,
       }),
-      [emblaRef, scrollPrev, scrollNext, loop],
+      [emblaRef, emblaApi, loop],
     );
 
     return (
@@ -81,6 +58,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             "grid grid-cols-1 grid-rows-1 rounded-4 bg-panel-solid",
             className,
           )}
+          aria-roledescription="carousel"
           {...props}
         />
       </CarouselContext.Provider>
@@ -157,6 +135,27 @@ export const CarouselSlide = forwardRef<CarouselSlideRef, CarouselSlideProps>(
   },
 );
 
+type CarouselBaseButtonRef = ComponentRef<typeof IconButton>;
+type CarouselBaseButtonProps = ComponentPropsWithoutRef<typeof IconButton>;
+
+const CarouselBaseButton = forwardRef<
+  CarouselBaseButtonRef,
+  CarouselBaseButtonProps
+>(function CarouselBaseButton({ className, ...props }, ref) {
+  return (
+    <IconButton
+      color="gray"
+      variant="surface"
+      highContrast
+      className={cx(
+        "isolate col-start-1 row-start-1 m-2 self-center",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
+
 type CarouselButtonRef = ComponentRef<typeof IconButton>;
 type CarouselButtonProps = Omit<
   ComponentPropsWithoutRef<typeof IconButton>,
@@ -167,45 +166,69 @@ export const CarouselPrevButton = forwardRef<
   CarouselButtonRef,
   CarouselButtonProps
 >(function CarouselPrevButton({ className, disabled, onClick, ...props }, ref) {
-  const context = useCarouselContext("CarouselPrevButton");
+  const { emblaApi } = useCarouselContext("CarouselPrevButton");
+
+  const canScrollPrev = useSyncExternalStore(
+    (callback) => {
+      if (!emblaApi) return () => {};
+
+      emblaApi.on("select", callback);
+      emblaApi.on("slidesChanged", callback);
+      return () => {
+        emblaApi.off("select", callback);
+        emblaApi.off("slidesChanged", callback);
+      };
+    },
+    () => !!emblaApi && emblaApi.canScrollPrev(),
+    () => false,
+  );
+
   return (
-    <IconButton
-      variant="surface"
-      className={cx(
-        "isolate col-start-1 row-start-1 m-2 self-center",
-        className,
-      )}
+    <CarouselBaseButton
       onClick={(...args) => {
         !!onClick && onClick(...args);
-        context.scrollPrev();
+        !!emblaApi && emblaApi.scrollPrev();
       }}
-      // disabled={disabled || !context.canScrollPrev}
+      disabled={disabled || !canScrollPrev}
       {...props}
     >
       <ChevronLeftIcon />
-    </IconButton>
+    </CarouselBaseButton>
   );
 });
 
 export const CarouselNextButton = forwardRef<
   CarouselButtonRef,
   CarouselButtonProps
->(function CarouselNextButton({ className, onClick, ...props }, ref) {
-  const context = useCarouselContext("CarouselNextButton");
+>(function CarouselNextButton({ className, disabled, onClick, ...props }, ref) {
+  const { emblaApi } = useCarouselContext("CarouselPrevButton");
+
+  const canScrollNext = useSyncExternalStore(
+    (callback) => {
+      if (!emblaApi) return () => {};
+
+      emblaApi.on("select", callback);
+      emblaApi.on("slidesChanged", callback);
+      return () => {
+        emblaApi.off("select", callback);
+        emblaApi.off("slidesChanged", callback);
+      };
+    },
+    () => !!emblaApi && emblaApi.canScrollNext(),
+    () => false,
+  );
+
   return (
-    <IconButton
-      variant="surface"
-      className={cx(
-        "isolate col-start-1 row-start-1 m-2 self-center justify-self-end",
-        className,
-      )}
+    <CarouselBaseButton
+      className={cx("justify-self-end", className)}
       onClick={(...args) => {
         !!onClick && onClick(...args);
-        context.scrollNext();
+        !!emblaApi && emblaApi.scrollNext();
       }}
+      disabled={disabled || !canScrollNext}
       {...props}
     >
       <ChevronRightIcon />
-    </IconButton>
+    </CarouselBaseButton>
   );
 });

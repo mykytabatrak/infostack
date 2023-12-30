@@ -103,7 +103,10 @@ export default function Home() {
               documentation a joy to write.
             </Text>
           </div>
-          <Carousel className="max-w-2xl shadow-6">
+          <Carousel
+            aria-label="Application screenshots"
+            className="max-w-2xl shadow-6"
+          >
             <CarouselViewport>
               <CarouselContainer>
                 <CarouselSlide asChild>
